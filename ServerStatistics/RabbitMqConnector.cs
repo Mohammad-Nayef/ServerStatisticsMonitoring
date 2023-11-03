@@ -1,6 +1,6 @@
 ﻿using RabbitMQ.Client;
 
-namespace RabbitMQ
+namespace ServerStatistics
 {
     public abstract class RabbitMqConnector
     {

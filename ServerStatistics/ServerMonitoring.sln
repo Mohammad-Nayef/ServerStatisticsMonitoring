@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerMonitoring", "ServerMonitoring.csproj", "{0637A650-7742-4CFB-8450-E466768C4DCD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMq", "..\RabbitMQ\RabbitMq.csproj", "{0D13CD11-86F3-4CE0-9E74-FCFBEBFEC54F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerStatistics", "ServerStatistics.csproj", "{0637A650-7742-4CFB-8450-E466768C4DCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{0637A650-7742-4CFB-8450-E466768C4DCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0637A650-7742-4CFB-8450-E466768C4DCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0637A650-7742-4CFB-8450-E466768C4DCD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D13CD11-86F3-4CE0-9E74-FCFBEBFEC54F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D13CD11-86F3-4CE0-9E74-FCFBEBFEC54F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D13CD11-86F3-4CE0-9E74-FCFBEBFEC54F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D13CD11-86F3-4CE0-9E74-FCFBEBFEC54F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

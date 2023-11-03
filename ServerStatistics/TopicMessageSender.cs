@@ -1,9 +1,8 @@
 ﻿using System.Text;
 using System.Text.Json;
-using RabbitMQ;
 using RabbitMQ.Client;
 
-namespace RabbitMq
+namespace ServerStatistics
 {
     public class TopicMessageSender : RabbitMqConnector
     {

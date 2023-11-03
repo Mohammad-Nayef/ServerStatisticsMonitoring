@@ -1,7 +1,12 @@
-﻿namespace ServerMonitoring
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace ServerStatistics
 {
     public class ServerStatisticsDTO
     {
+        [BsonId]
+        public readonly ObjectId Id = ObjectId.GenerateNewId();
         public double MemoryUsage { get; set; }
         public double AvailableMemory { get; set; }
         public double CpuUsage { get; set; }
