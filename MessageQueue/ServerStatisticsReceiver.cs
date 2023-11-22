@@ -1,15 +1,15 @@
 ﻿using System.Text;
+using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Text.Json;
+using ServerStatistics.Extensions;
 using ServerStatistics.Models;
 using ServerStatistics.Services;
-using ServerStatistics.Extensions;
 using SignalREndpoint;
 
 namespace MessageQueue
 {
-    public class ServerStatisticsReceiver : RabbitMqConnector
+    public class ServerStatisticsReceiver : RabbitMqConnector, IMessageReceiver
     {
         private string _queueName;
         private IServerStatisticsService _statisticsService;
@@ -19,9 +19,9 @@ namespace MessageQueue
         private ServerStatisticsDTO _previousStatistics;
 
         public ServerStatisticsReceiver(
-            string connectionName, 
+            string connectionName,
             string exchangeName,
-            string queueName, 
+            string queueName,
             string routingKey,
             IServerStatisticsService statisticsService,
             IAlertSender alertSender) : base(connectionName)
@@ -40,12 +40,16 @@ namespace MessageQueue
 
             consumer.Received += async (sender, args) =>
             {
-                _serverStatistics = GetServerStatistics(args);
+                try
+                {
+                    _serverStatistics = GetServerStatistics(args);
 
-                await DetectAndReportAnomaliesAsync();
-                await PersistToDatabaseAsync(args);
+                    await DetectAndReportAnomaliesAsync();
+                    await PersistToDatabaseAsync(args);
 
-                _channel.BasicAck(args.DeliveryTag, false);
+                    _channel.BasicAck(args.DeliveryTag, false);
+                }
+                catch { }
             };
 
             _channel.BasicConsume(_queueName, false, consumer);
@@ -55,7 +59,7 @@ namespace MessageQueue
         {
             var bytesMessage = args.Body.ToArray();
             var stringMessage = Encoding.UTF8.GetString(bytesMessage);
-            
+
             return JsonSerializer.Deserialize<ServerStatisticsDTO>(stringMessage);
         }
 
@@ -80,7 +84,7 @@ namespace MessageQueue
             {
                 if (_serverStatistics.HasSuddenMemoryUsageIncrease(_previousStatistics))
                     await _alertSender.SendAsync("Memory usage anomaly alert");
-            
+
                 if (_serverStatistics.HasSuddenCpuUsageIncrease(_previousStatistics))
                     await _alertSender.SendAsync("CPU usage anomaly alert");
             }
