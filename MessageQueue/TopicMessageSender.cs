@@ -4,7 +4,7 @@ using RabbitMQ.Client;
 
 namespace MessageQueue
 {
-    public class TopicMessageSender : RabbitMqConnector
+    public class TopicMessageSender : RabbitMqConnector, IMessageSender
     {
         private string _exchangeName;
         private string _routingKey;
