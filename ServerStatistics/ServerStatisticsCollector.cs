@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using ServerStatistics.Models;
 
 namespace ServerStatistics
 {
