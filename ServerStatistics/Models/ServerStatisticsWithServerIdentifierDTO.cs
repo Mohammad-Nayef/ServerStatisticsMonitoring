@@ -1,9 +1,9 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ServerStatistics
+namespace ServerStatistics.Models
 {
-    public class ServerStatisticsDTO
+    public class ServerStatisticsWithServerIdentifierDTO
     {
         [BsonId]
         public readonly ObjectId Id = ObjectId.GenerateNewId();
@@ -11,5 +11,6 @@ namespace ServerStatistics
         public double AvailableMemory { get; set; }
         public double CpuUsage { get; set; }
         public DateTime Timestamp { get; set; }
+        public string ServerIdentifier { get; set; }
     }
 }
