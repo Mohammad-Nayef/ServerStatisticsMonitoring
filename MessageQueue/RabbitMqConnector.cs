@@ -17,11 +17,5 @@ namespace MessageQueue
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
         }
-
-        ~RabbitMqConnector()
-        {
-            _connection.Dispose();
-            _channel.Dispose();
-        }
     }
 }
