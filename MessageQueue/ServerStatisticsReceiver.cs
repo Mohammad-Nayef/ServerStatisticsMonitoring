@@ -78,9 +78,10 @@ namespace MessageQueue
             }
             else
             {
-                _previousStatistics = _serverStatistics;
                 _hasPreviousStatistics = true;
             }
+            
+            _previousStatistics = _serverStatistics;
 
             if (_serverStatistics.MemoryUsageExceededThreshold())
                 await _alertSender.SendAsync("High memory usage alert");
