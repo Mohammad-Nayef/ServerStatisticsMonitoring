@@ -42,7 +42,7 @@ namespace MessageQueue
             {
                 try
                 {
-                    _serverStatistics = GetServerStatistics(args);
+                    _serverStatistics = args.GetServerStatistics();
 
                     await DetectAndReportAnomaliesAsync();
                     await PersistToDatabaseAsync(args);
@@ -53,14 +53,6 @@ namespace MessageQueue
             };
 
             _channel.BasicConsume(_queueName, false, consumer);
-        }
-
-        private ServerStatisticsDTO? GetServerStatistics(BasicDeliverEventArgs args)
-        {
-            var bytesMessage = args.Body.ToArray();
-            var stringMessage = Encoding.UTF8.GetString(bytesMessage);
-
-            return JsonSerializer.Deserialize<ServerStatisticsDTO>(stringMessage);
         }
 
         private async Task PersistToDatabaseAsync(BasicDeliverEventArgs args)
