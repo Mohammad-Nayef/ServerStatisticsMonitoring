@@ -1,6 +1,4 @@
-﻿using System.Text;
-using System.Text.Json;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using ServerStatistics.Extensions;
 using ServerStatistics.Models;
