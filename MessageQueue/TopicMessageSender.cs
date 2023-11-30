@@ -9,12 +9,13 @@ namespace MessageQueue
         private string _exchangeName;
         private string _routingKey;
 
-        public TopicMessageSender(string connectionName, string exchangeName,
-            string queueName, string routingKey) : base(connectionName)
+        public TopicMessageSender(
+            string connectionName, 
+            string exchangeName,
+            string queueName, 
+            string routingKey) : 
+            base(connectionName, exchangeName, ExchangeType.Topic, queueName, routingKey)
         {
-            _channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
-            _channel.QueueDeclare(queueName, false, false, false);
-            _channel.QueueBind(queueName, exchangeName, routingKey);
             _exchangeName = exchangeName;
             _routingKey = routingKey;
         }

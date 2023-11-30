@@ -22,11 +22,9 @@ namespace MessageQueue
             string queueName,
             string routingKey,
             IServerStatisticsService statisticsService,
-            IAlertSender alertSender) : base(connectionName)
+            IAlertSender alertSender) :
+            base(connectionName, exchangeName, ExchangeType.Topic, queueName, routingKey)
         {
-            _channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
-            _channel.QueueDeclare(queueName, false, false, false);
-            _channel.QueueBind(queueName, exchangeName, routingKey);
             _queueName = queueName;
             _statisticsService = statisticsService;
             _alertSender = alertSender;
