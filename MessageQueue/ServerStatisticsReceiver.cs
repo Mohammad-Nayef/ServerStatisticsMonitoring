@@ -4,7 +4,6 @@ using RabbitMQ.Client.Events;
 using ServerStatistics.Extensions;
 using ServerStatistics.Models;
 using ServerStatistics.Services;
-using SignalREndpoint;
 
 namespace MessageQueue
 {
@@ -13,9 +12,7 @@ namespace MessageQueue
         private string _queueName;
         private IServerStatisticsService _statisticsService;
         private ServerStatisticsDTO _serverStatistics;
-        private IAlertSender _alertSender;
-        private bool _hasPreviousStatistics = false;
-        private ServerStatisticsDTO _previousStatistics;
+        private readonly IServerAnomaliesService _serverAnomaliesDetection;
 
         public ServerStatisticsReceiver(
             string connectionName,
@@ -23,8 +20,8 @@ namespace MessageQueue
             string queueName,
             string routingKey,
             IServerStatisticsService statisticsService,
-            IAlertSender alertSender,
-            IAppConfigurations config) :
+            IAppConfigurations config,
+            IServerAnomaliesService serverAnomaliesDetection) :
             base(
                 connectionName, 
                 exchangeName, 
@@ -35,7 +32,7 @@ namespace MessageQueue
         {
             _queueName = queueName;
             _statisticsService = statisticsService;
-            _alertSender = alertSender;
+            _serverAnomaliesDetection = serverAnomaliesDetection;
         }
 
         public void Consume()
@@ -47,8 +44,7 @@ namespace MessageQueue
                 try
                 {
                     _serverStatistics = args.GetServerStatistics();
-
-                    await DetectAndReportAnomaliesAsync();
+                    await _serverAnomaliesDetection.DetectAndReportAsync(_serverStatistics);
                     await PersistToDatabaseAsync(args);
 
                     _channel.BasicAck(args.DeliveryTag, false);
@@ -61,41 +57,8 @@ namespace MessageQueue
 
         private async Task PersistToDatabaseAsync(BasicDeliverEventArgs args)
         {
-            await _statisticsService.InsertAsync(GetServerStatisticsWithServerIdentifier(args));
-        }
-
-        private ServerStatisticsWithServerIdentifierDTO GetServerStatisticsWithServerIdentifier(
-            BasicDeliverEventArgs args)
-        {
-            var serverIdentifier = args.RoutingKey
-                .Split('.')
-                .LastOrDefault();
-
-            return _serverStatistics.IncludeServerIdentifier(serverIdentifier);
-        }
-
-        private async Task DetectAndReportAnomaliesAsync()
-        {
-            if (_hasPreviousStatistics)
-            {
-                if (_serverStatistics.HasSuddenMemoryUsageIncrease(_previousStatistics))
-                    await _alertSender.SendAsync("Memory usage anomaly alert");
-
-                if (_serverStatistics.HasSuddenCpuUsageIncrease(_previousStatistics))
-                    await _alertSender.SendAsync("CPU usage anomaly alert");
-            }
-            else
-            {
-                _hasPreviousStatistics = true;
-            }
-            
-            _previousStatistics = _serverStatistics;
-
-            if (_serverStatistics.MemoryUsageExceededThreshold())
-                await _alertSender.SendAsync("High memory usage alert");
-
-            if (_serverStatistics.CpuUsageExceededThreshold())
-                await _alertSender.SendAsync("High CPU usage alert");
+            await _statisticsService.InsertAsync(
+                _serverStatistics.GetServerStatisticsWithServerIdentifier(args));
         }
     }
 }
