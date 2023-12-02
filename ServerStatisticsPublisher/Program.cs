@@ -1,8 +1,9 @@
 ﻿using ServerStatistics;
 using MessageQueue;
 using GlobalConfigurations;
+using ServerStatistics.Models;
 
-var serverStatistics = new ServerStatisticsCollector();
+var serverStatisticsCollector = new ServerStatisticsCollector();
 var config = new AppConfigurations();
 var samplingInterval = config.ServerStatisticsConfig.SamplingIntervalSeconds;
 var serverIdentifier = config.ServerStatisticsConfig.ServerIdentifier;
@@ -11,7 +12,8 @@ Console.WriteLine(
     "This service is responsible for sending the server statistics to a message queue.\n");
 
 Console.WriteLine("Connecting...");
-TopicMessageSender? messageSender = null;
+TopicMessageSender messageSender = null;
+ServerStatisticsDTO currentServerStatistics = null;
 
 while (true) {
 
@@ -23,8 +25,9 @@ while (true) {
             "ServerStatistics",
             $"ServerStatistics.{serverIdentifier}",
             config);
-        
-        messageSender.Send(serverStatistics.CurrentServerStatistics);
+
+        currentServerStatistics = serverStatisticsCollector.CurrentServerStatistics;
+        messageSender.Send(currentServerStatistics);
     }
     catch
     {
@@ -36,11 +39,7 @@ while (true) {
     }
 
 
-    Console.WriteLine($"\nMemory Usage: {serverStatistics.CurrentServerStatistics.MemoryUsage}");
-    Console.WriteLine($"Available Memory: " +
-        $"{serverStatistics.CurrentServerStatistics.AvailableMemory}");
-    Console.WriteLine($"CPU Usage: {serverStatistics.CurrentServerStatistics.CpuUsage}%");
-    Console.WriteLine($"Timestamp: {serverStatistics.CurrentServerStatistics.Timestamp}");
+    Console.WriteLine(currentServerStatistics);
 
     Thread.Sleep(TimeSpan.FromSeconds(samplingInterval));
 }
