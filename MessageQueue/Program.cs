@@ -21,9 +21,9 @@ while (true)
                 "Statistics exchange",
                 "ServerStatistics",
                 "ServerStatistics.*",
-                new ServerStatisticsService(new MongoDbServerStatisticsRepository()),
-                new SignalRAlertSender(),
-                config
+                new ServerStatisticsService(new MongoDbServerStatisticsRepository(config)),
+                config,
+                new ServerAnomaliesService(config, new SignalRAlertSender(config))
                 );
 
         messageConsumer.Consume();
