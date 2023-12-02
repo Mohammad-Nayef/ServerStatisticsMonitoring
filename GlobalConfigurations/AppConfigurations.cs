@@ -3,7 +3,7 @@ using GlobalConfigurations.Models;
 
 namespace GlobalConfigurations
 {
-    public class AppConfigurations
+    public class AppConfigurations : IAppConfigurations
     {
         public ServerStatisticsConfigDTO ServerStatisticsConfig { get; set; }
         public AnomalyDetectionConfigDTO AnomalyDetectionConfig { get; set; }

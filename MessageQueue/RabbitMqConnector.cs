@@ -5,7 +5,7 @@ namespace MessageQueue
 {
     public abstract class RabbitMqConnector
     {
-        private AppConfigurations _config = new();
+        private IAppConfigurations _config;
         private ConnectionFactory _factory = new();
         private IConnection _connection;
         protected IModel _channel;
@@ -15,8 +15,10 @@ namespace MessageQueue
             string exchangeName, 
             string topic, 
             string queueName, 
-            string routingKey)
+            string routingKey,
+            IAppConfigurations config)
         {
+            _config = config;
             _factory.HostName = _config.RabbitMqConfig.HostName;
             _factory.ClientProvidedName = connectionName;
             _connection = _factory.CreateConnection();

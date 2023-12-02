@@ -1,16 +1,18 @@
-﻿using SignalREndpoint;
+﻿using GlobalConfigurations;
+using SignalREndpoint;
 
 Console.WriteLine("This service is responsible for consuming alerts from SignalR and printing anomalies alerts.\n");
 
 Console.WriteLine("Connecting...");
 
 SignalRAlertConsumer? alertConsumer = null;
+var config = new AppConfigurations();
 
 while (true)
 {
     try
     {
-        alertConsumer = new SignalRAlertConsumer();
+        alertConsumer = new SignalRAlertConsumer(config);
         await alertConsumer.ConsumeAsync();
     }
     catch

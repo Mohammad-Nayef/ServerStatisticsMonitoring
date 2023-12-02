@@ -21,7 +21,8 @@ while (true) {
             "Message sending",
             "Statistics exchange",
             "ServerStatistics",
-            $"ServerStatistics.{serverIdentifier}");
+            $"ServerStatistics.{serverIdentifier}",
+            config);
         
         messageSender.Send(serverStatistics.CurrentServerStatistics);
     }

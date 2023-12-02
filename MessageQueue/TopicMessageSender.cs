@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using GlobalConfigurations;
 using RabbitMQ.Client;
 
 namespace MessageQueue
@@ -13,8 +14,15 @@ namespace MessageQueue
             string connectionName, 
             string exchangeName,
             string queueName, 
-            string routingKey) : 
-            base(connectionName, exchangeName, ExchangeType.Topic, queueName, routingKey)
+            string routingKey,
+            IAppConfigurations config) : 
+            base(
+                connectionName, 
+                exchangeName, 
+                ExchangeType.Topic, 
+                queueName, 
+                routingKey,
+                config)
         {
             _exchangeName = exchangeName;
             _routingKey = routingKey;

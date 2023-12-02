@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using GlobalConfigurations;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using ServerStatistics.Extensions;
 using ServerStatistics.Models;
@@ -22,8 +23,15 @@ namespace MessageQueue
             string queueName,
             string routingKey,
             IServerStatisticsService statisticsService,
-            IAlertSender alertSender) :
-            base(connectionName, exchangeName, ExchangeType.Topic, queueName, routingKey)
+            IAlertSender alertSender,
+            IAppConfigurations config) :
+            base(
+                connectionName, 
+                exchangeName, 
+                ExchangeType.Topic, 
+                queueName, 
+                routingKey,
+                config)
         {
             _queueName = queueName;
             _statisticsService = statisticsService;

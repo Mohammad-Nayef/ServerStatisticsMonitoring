@@ -7,10 +7,8 @@ namespace SignalREndpoint
     {
         public HubConnection Connection { get; private set; }
 
-        public SignalRAlertConsumer()
+        public SignalRAlertConsumer(IAppConfigurations config)
         {
-            var config = new AppConfigurations();
-
             Connection = new HubConnectionBuilder()
                 .WithUrl(config.SignalRConfig.Url)
                 .Build();
