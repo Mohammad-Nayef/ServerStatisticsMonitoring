@@ -14,5 +14,16 @@ namespace ServerStatistics.Extensions
 
             return JsonSerializer.Deserialize<ServerStatisticsDTO>(stringMessage);
         }
+
+        public static ServerStatisticsWithServerIdentifierDTO 
+            GetServerStatisticsWithServerIdentifier(
+            this ServerStatisticsDTO serverStatistics, BasicDeliverEventArgs args)
+        {
+            var serverIdentifier = args.RoutingKey
+                .Split('.')
+                .LastOrDefault();
+
+            return serverStatistics.IncludeServerIdentifier(serverIdentifier);
+        }
     }
 }
