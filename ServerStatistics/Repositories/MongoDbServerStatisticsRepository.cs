@@ -6,15 +6,13 @@ namespace ServerStatistics.Repositories
 {
     public class MongoDbServerStatisticsRepository : IServerStatisticsRepository
     {
-        private IAppConfigurations _config;
         private MongoClient _client;
         private IMongoDatabase _database;
         private IMongoCollection<ServerStatisticsWithServerIdentifierDTO> _serverStatistics;
 
         public MongoDbServerStatisticsRepository(IAppConfigurations config)
         {
-            _config = config;
-            _client = new MongoClient(_config.MongoDbConfig.ConnectionString);
+            _client = new MongoClient(config.MongoDbConfig.ConnectionString);
             _database = _client.GetDatabase("ServerMonitoring");
 
             _serverStatistics = _database.
