@@ -32,7 +32,7 @@ namespace ServerStatistics
             _currentProcess = Process.GetCurrentProcess();
         }
 
-        private double GetCurrentCpuUsage() => _cpuCounter.NextValue();
+        private double GetCurrentCpuUsage() => _cpuCounter.NextValue() / 100;
 
         private double GetCurrentAvailableMemory() => _ramCounter.NextValue();
 
@@ -47,7 +47,14 @@ namespace ServerStatistics
                 _currentProcess.Refresh();
             }
 
-            return ToMegaBytes(_currentProcess.WorkingSet64);
+            return GetMemoryUsagePercent();
+        }
+
+        private double GetMemoryUsagePercent()
+        {
+            var usedMemory = ToMegaBytes(_currentProcess.WorkingSet64);
+
+            return usedMemory / (usedMemory + GetCurrentAvailableMemory());
         }
 
         private double ToMegaBytes(long workingSet64) => workingSet64 / (1024 * 1024);
