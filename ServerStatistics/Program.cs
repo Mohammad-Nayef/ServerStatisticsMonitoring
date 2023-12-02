@@ -7,6 +7,7 @@ Console.WriteLine("Connecting...");
 
 SignalRAlertConsumer? alertConsumer = null;
 var config = new AppConfigurations();
+var reconnectingIntervalSeconds = config.SignalRConfig.ReconnectIntervalSeconds;
 
 while (true)
 {
@@ -18,7 +19,7 @@ while (true)
     catch
     {
         Console.WriteLine("\nConnection to SignalR failed!");
-        Thread.Sleep(2000);
+        Thread.Sleep((int)(reconnectingIntervalSeconds * 1000));
         Console.WriteLine("Reconnecting...");
 
         continue;
