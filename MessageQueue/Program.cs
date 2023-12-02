@@ -11,7 +11,6 @@ Console.WriteLine(
 Console.WriteLine("Connecting...");
 
 var config = new AppConfigurations();
-var serverIdentifier = config.ServerStatisticsConfig.ServerIdentifier;
 var connectionName = config.RabbitMqConfig.ConsumerConnectionName;
 var exchangeName = config.RabbitMqConfig.ExchangeName;
 var queueName = config.RabbitMqConfig.QueueName;

@@ -12,7 +12,7 @@
             return $"\nMemory Usage: {MemoryUsage * 100} %\n" +
                    $"Available Memory: {AvailableMemory}\n" +
                    $"CPU Usage: {CpuUsage * 100} %\n" +
-                   $"Timestamp: {Timestamp}\n";
+                   $"Timestamp: {Timestamp}";
         }
     }
 }
