@@ -13,10 +13,11 @@ namespace ServerStatistics.Repositories
         public MongoDbServerStatisticsRepository(IAppConfigurations config)
         {
             _client = new MongoClient(config.MongoDbConfig.ConnectionString);
-            _database = _client.GetDatabase("ServerMonitoring");
+            _database = _client.GetDatabase(config.MongoDbConfig.ServerMonitoringDatabaseName);
 
             _serverStatistics = _database.
-                GetCollection<ServerStatisticsWithServerIdentifierDTO>("ServerStatistics");
+                GetCollection<ServerStatisticsWithServerIdentifierDTO>(
+                    config.MongoDbConfig.ServerStatisticsCollectionName);
         }
 
         public async Task InsertAsync(ServerStatisticsWithServerIdentifierDTO serverStatistics)
